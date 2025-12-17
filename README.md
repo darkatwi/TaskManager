@@ -99,5 +99,26 @@ Contributions are welcome!
 5. Open a Pull Request
 
 
+## 📸 Screenshots
+
+Here are some screenshots of the TaskManager application:
+
+### Login Page
+![Login Page](Assets/loginpage.jpeg)
+
+### Dashboard
+![Dashboard](Assets/dashboard.jpeg)
+
+### Tasks Table
+![Tasks Table](Assets/taskpage.jpeg)
+
+### Collaborators
+![Collaborators](Assets/collaborators.jpeg)
+
+### Email Reminder
+![Task Details](Assets/email.jpeg)
 ```
+
+
+
 
