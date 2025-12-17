@@ -107,16 +107,16 @@ Here are some screenshots of the TaskManager application:
 <img src="Assets/loginpage.jpeg" alt="Login Page" width="400"/>
 
 ### Dashboard
-![Dashboard](Assets/dashboard.jpeg)
+<img src="Assets/dashboard.jpeg" alt="dashboard" width="400"/>
 
 ### Tasks Table
-![Tasks Table](Assets/taskpage.jpeg)
+<img src="Assets/taskpage.jpeg" alt="Tasks Table" width="400"/>
 
-### Collaborators
-![Collaborators](Assets/collaborators.jpeg)
+### Collaborators 
+<img src="Assets/collaborators.jpeg" alt="Collaborators" width="400"/>
 
 ### Email Reminder
-![Task Details](Assets/email.jpeg)
+<img src="Assets/email.jpeg" alt="Email Reminder" width="400"/>
 ```
 
 
