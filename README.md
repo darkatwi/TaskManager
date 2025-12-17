@@ -104,7 +104,7 @@ Contributions are welcome!
 Here are some screenshots of the TaskManager application:
 
 ### Login Page
-![Login Page](Assets/loginpage.jpeg)
+<img src="Assets/loginpage.jpeg" alt="Login Page" width="400"/>
 
 ### Dashboard
 ![Dashboard](Assets/dashboard.jpeg)
