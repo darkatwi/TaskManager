@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard - Task Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+</head>
+
+<body>
+  <div class="dashboard">
+    <nav class="sidebar">
+      <h2>Task Manager</h2>
+      <button id="togglesidebar" class="toggle-btn">☰</button>
+      <ul>
+        <li><a href="#top"><span>Dashboard</span></a></li>
+        <li><a href="#tasks"><span>Tasks</span></a></li>
+        <li><a href="#collaborators"
+            onclick="event.preventDefault(); document.querySelector('#collaborators').scrollIntoView({ behavior: 'smooth' });">Collaborators</a>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="main-content">
+      <header id="top">
+        <h1>Welcome to your Dashboard</h1>
+      </header>
+
+      <section class="content">
+        <div class="dashboard-welcome">
+          <h2>Welcome back, 👋</h2>
+          <p>Here is a quick overview of your system today</p>
+        </div>
+
+        <div class="cards">
+          <div class="card total">
+            <h3>Your Tasks</h3>
+            <p></p>
+          </div>
+          <div class="card completed">
+            <h3>Completed</h3>
+            <p></p>
+          </div>
+          <div class="card today">
+            <h3>Due Today</h3>
+            <p></p>
+          </div>
+          <div class="card overdue">
+            <h3>Overdue</h3>
+            <p></p>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <h3>Users</h3>
+            <p>0</p>
+          </div>
+          <div class="stat-box">
+            <h3>Total Tasks</h3>
+            <p id="totalTasksStatBox">0</p>
+          </div>
+
+          <div class="add-task">
+            <h2>Add New Task</h2>
+            <form id="addTaskForm">
+              <input type="text" id="taskName" placeholder="Task Name" required />
+              <select id="taskStatus">
+                <option value="pending" selected>Pending</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+              </select>
+              <input type="date" id="taskDueDate" required />
+              <select id="taskPriority">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+              </select>
+              <select id="taskAssignedTo">
+                <option value="" disabled selected>Select collaborator</option>
+              </select>
+              <textarea id="taskComments" placeholder="Comments / Details..." rows="3"></textarea>
+              <button type="submit">Add Task</button>
+            </form>
+          </div>
+
+          <div id="tasks" class="task-list">
+            <h2>My Tasks</h2>
+            <div class="task-table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Task</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Priority</th>
+                    <th>Assigned To</th>
+                    <th>Comments</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                  </tr>
+                </thead>
+                <tbody id="personalTaskTableBody"></tbody>
+              </table>
+            </div>
+
+            <h2>All Tasks</h2>
+            <div class="task-table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Task</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Priority</th>
+                    <th>Assigned To</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                    <th>Comments</th>
+                  </tr>
+                </thead>
+                <tbody id="otherTaskTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="collaborators" class="collaborators-section">
+            <h2>Collaborators</h2>
+            <div class="collaborators-actions">
+              <label for="collaboratorSelect">Add Collaborator:</label>
+              <select id="collaboratorSelect">
+                <option value="" disabled selected>Select a user</option>
+              </select>
+              <button id="addSelectedCollaboratorBtn" type="button">Add</button>
+            </div>
+            <div id="collaboratorsGrid" class="collaboratorsGrid"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../js/dashboard.js"></script>
+
+  <script>
+    function createCommentToggleCell(commentText) {
+      const td = document.createElement("td");
+
+      const btn = document.createElement("button");
+      btn.textContent = "View";
+      btn.style.marginBottom = "5px";
+      btn.classList.add("view-comments-btn");
+
+      const commentPara = document.createElement("p");
+      commentPara.textContent = commentText;
+      commentPara.style.display = "none";
+      commentPara.style.margin = "5px 0";
+      commentPara.style.fontSize = "0.9em";
+
+      btn.addEventListener("click", () => {
+        const isVisible = commentPara.style.display === "block";
+        commentPara.style.display = isVisible ? "none" : "block";
+        btn.textContent = isVisible ? "View" : "Hide";
+      });
+
+      td.appendChild(btn);
+      td.appendChild(commentPara);
+      return td;
+    }
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const userEmail = localStorage.getItem('userEmail') || '';
+      const currentUserName = userEmail.split('@')[0];
+      const welcomeHeading = document.querySelector('.dashboard-welcome h2');
+      if (welcomeHeading) {
+        welcomeHeading.textContent = `Welcome back, ${currentUserName} 👋`;
+      }
+
+      try {
+        const resUsers = await fetch('http://localhost:5000/api/collaborators');
+        const users = await resUsers.json();
+        const count = Array.isArray(users) ? users.length : 0;
+        document.querySelectorAll('.stat-box').forEach(box => {
+          if (box.querySelector('h3')?.innerText === 'Users') {
+            box.querySelector('p').textContent = count;
+          }
+        });
+      } catch (err) {
+        console.error('Error fetching users:', err);
+      }
+
+      const localTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+      const totalTasks = localTasks.length;
+
+      document.querySelectorAll('.stat-box').forEach(box => {
+        if (box.querySelector('h3')?.innerText === 'Total Tasks') {
+          box.querySelector('p').textContent = totalTasks;
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
